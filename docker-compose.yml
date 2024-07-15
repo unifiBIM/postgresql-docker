@@ -1,0 +1,28 @@
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgreSQL
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data:rw
+    env_file:
+      - .env
+    restart: on-failure:10
+    ports:
+      - ${DOCKER_POSTGRES_INIT_PORT}:5432
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4
+    volumes:
+      - pgadmin-storage:/var/lib/pgadmin/data:rw
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - postgresql
+    ports:
+      - ${DOCKER_PGADMIN_INIT_PORT}:80
+
+volumes:
+  postgres-storage:
+  pgadmin-storage:
